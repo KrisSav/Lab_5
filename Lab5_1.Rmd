@@ -1,0 +1,49 @@
+---
+title: "The World Bank:Total natural resources rents (% of GDP)"
+author: "Савельева К.А."
+date: '7 апреля 2017 г '
+output: html_document
+---
+
+```{r Опции}
+# глобальные опции отображения графиков
+
+```
+
+Цель - Интерактивная карта-хороплет стран мира (GVis), показатель –
+любой из раздела «Energy & Mining» (Энергетика и добывающие
+отрасли) базы Всемирного банка.
+
+```{r  Пакеты, warning = F, message = F}
+# подгружаем необходимые библиотеки
+library('WDI')
+library('googleVis')
+library('dtplyr')
+```
+
+Исходные данные: Показатель Total natural resources rents (% of GDP) из раздела «Energy & Mining»
+
+```{r Загрузка данных и построение карты, results = 'asis', warning = F, message = F, echo = F}
+DT <- read.csv(file = "F:/data_r.csv", header = T)
+
+# объект: таблица исходных данных
+g.tbl <- gvisTable(data = DT,
+                   options = list(width = 220, height = 400))
+
+# объект: интерактивная карта
+g.chart <- gvisGeoChart(data = DT,
+                        locationvar = 'Country',
+                        colorvar = 'Indicator',
+                        options = list(width = 500,
+                                       height = 400,
+                                       dataMode = 'regions'))
+
+# размещаем таблицу и карту на одной панели (слева направо)
+TG <- gvisMerge(g.tbl, g.chart,
+                horizontal = TRUE,
+                tableOptions = 'bgcolor=\"#CCCCCC\"cellspacing=10')
+
+print(TG, 'chart')
+```
+
+
