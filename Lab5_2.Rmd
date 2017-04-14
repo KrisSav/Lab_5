@@ -1,0 +1,48 @@
+---
+title: "Lab5_2"
+author: "Савельева К."
+date: '13 апреля 2017 г '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library('leaflet')
+```
+
+Создание leaflet-карты с пятью объектами (дилерские салоны Kia в Москве)
+
+```{r Карта на основе leaflet, , results = 'asis', message = F}
+# картинка-логотип для маркеров объекта
+fileURL1 <- 'http://st15.stblizko.ru/images/news/000/309/442_thumb.jpg'
+
+
+kia.icon <- makeIcon(iconUrl = fileURL1, 
+                      iconWidth = 45,
+                       iconHeight = 33)
+
+# загружаем данные с характеристиками объектов
+fileURL <- 'https://raw.githubusercontent.com/KrisSav/Lab_5/master/Data5_2.csv'
+df <- read.table(fileURL, header = T, as.is = T, 
+                 sep = ';', dec = ',', fileEncoding = 'cp1251')
+
+# таблица с координатами
+kia.loc <- df[, c('lat', 'lng')]
+
+# подписи к объектам с гиперссылками
+kia.sites <- paste0("<a href='", df[, 'hyperlink'], "'>", 
+                       df[, 'address_eng'], "</a></br><em>", 
+                       df[, 'hyperlink'], "</em>")
+
+# создаём виджет с картой
+myMap <- kia.loc %>% leaflet(width = 800, height = 800) %>% 
+addTiles() %>% addMarkers(icon = kia.icon, popup = kia.sites)
+
+# рисуем карту
+myMap
+```
+
+
+
+
+
